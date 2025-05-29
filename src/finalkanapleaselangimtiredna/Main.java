@@ -4,7 +4,21 @@
  */
 package finalkanapleaselangimtiredna;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.swing.ImageIcon;
+import javax.swing.Timer;
 
 /**
  *
@@ -12,6 +26,7 @@ import java.util.Random;
  */
 public class Main extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form Main
      */
@@ -25,7 +40,7 @@ public class Main extends javax.swing.JFrame {
     
     Entity activeCharacter;
     
-    
+    InputStream music;
     
     public Main() {
         initComponents();
@@ -70,6 +85,7 @@ public class Main extends javax.swing.JFrame {
         pBarEnemyHp = new javax.swing.JProgressBar();
         lblEnemyHpAndMaxHp = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
+        lblSkill2Icon = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -222,6 +238,11 @@ public class Main extends javax.swing.JFrame {
         btnSkill1.setText("Skill1");
 
         btnSkill2.setText("Skill2");
+        btnSkill2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSkill2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelBattleDoingsLayout = new javax.swing.GroupLayout(PanelBattleDoings);
         PanelBattleDoings.setLayout(PanelBattleDoingsLayout);
@@ -307,20 +328,14 @@ public class Main extends javax.swing.JFrame {
         PanelEnemyInfo.setBounds(1, 1, 1097, 79);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
-        );
+        lblSkill2Icon.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
+        lblSkill2Icon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel3.add(lblSkill2Icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 1090, 410));
 
         jPanel2.add(jPanel3);
-        jPanel3.setBounds(1, 86, 1097, 492);
+        jPanel3.setBounds(1, 86, 1097, 490);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -342,12 +357,23 @@ public class Main extends javax.swing.JFrame {
 
     public void checkHp(){
         
+    
     }
+    
+        Timer timer = new Timer(4000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            lblSkill2Icon.setIcon(null);
+            }
+        });
+            
     private void btnArthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArthActionPerformed
         // TODO add your handling code here:
         arth.getStats();
         activeCharacter = arth;
         updateLabelAndBars();
+        
+        btnSkill2.setText("Hackerman");
     }//GEN-LAST:event_btnArthActionPerformed
 
     private void btnRexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRexActionPerformed
@@ -355,6 +381,8 @@ public class Main extends javax.swing.JFrame {
         rex.getStats();
         activeCharacter = rex;
         updateLabelAndBars();
+        
+        btnSkill2.setText("<html>Money<br>Attack<html>");
     }//GEN-LAST:event_btnRexActionPerformed
 
     private void btnAaronActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAaronActionPerformed
@@ -362,6 +390,8 @@ public class Main extends javax.swing.JFrame {
         aaron.getStats();
         activeCharacter = aaron;
         updateLabelAndBars();
+        
+        btnSkill2.setText("BadLuck");
     }//GEN-LAST:event_btnAaronActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -395,6 +425,72 @@ public class Main extends javax.swing.JFrame {
         }
         updateLabelAndBars();
     }//GEN-LAST:event_btnBasicAttackActionPerformed
+
+    private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
+        // TODO add your handling code here:
+        
+        if (activeCharacter.equals(arth)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2ArthAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            try {
+                InputStream is = getClass().getResourceAsStream("/Music/arthTheme.wav");
+                if (is == null) {
+                    System.err.println("File not found!");
+                    return;
+                }
+
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (activeCharacter.equals(aaron)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2AaronAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            try {
+                InputStream is = getClass().getResourceAsStream("/Music/aaronTheme.wav");
+                if (is == null) {
+                    System.err.println("File not found!");
+                    return;
+                }
+
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else if (activeCharacter.equals(rex)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2RexAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            try {
+                InputStream is = getClass().getResourceAsStream("/Music/aaronTheme.wav");
+                if (is == null) {
+                    System.err.println("File not found!");
+                    return;
+                }
+
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(is));
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_btnSkill2ActionPerformed
 
     
     private void updateLabelAndBars(){
@@ -511,6 +607,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel lblActiveCharacterManaAndMaxMana;
     private javax.swing.JLabel lblEnemyHpAndMaxHp;
     private javax.swing.JLabel lblEnemyName;
+    private javax.swing.JLabel lblSkill2Icon;
     private javax.swing.JProgressBar pBarActiveCharacterHP;
     private javax.swing.JProgressBar pBarActiveCharacterMana;
     private javax.swing.JProgressBar pBarEnemyHp;
