@@ -21,8 +21,9 @@ public class Entity {
     int dodgeCooldown;
     int skill1Cooldown;
     int skill2Cooldown;
+    double multiplier;
 
-    public Entity(int level, int experiencePoints, String name, int hp, int maxHp, int mana, int maxMana, int defense, int baseAttack, int critDamage, double critRate, int dodgeCooldown, int skill1Cooldown, int skill2Cooldown) {
+    public Entity(int level, int experiencePoints, String name, int hp, int maxHp, int mana, int maxMana, int defense, int baseAttack, int critDamage, double critRate, int dodgeCooldown, int skill1Cooldown, int skill2Cooldown, double multiplier) {
         this.level = level;
         this.name = name;
         this.hp = hp;
@@ -36,6 +37,7 @@ public class Entity {
         this.dodgeCooldown = dodgeCooldown;
         this.skill1Cooldown = skill1Cooldown;
         this.skill2Cooldown = skill2Cooldown;
+        this.multiplier = multiplier;
     }
 
     public void basicAttack(){

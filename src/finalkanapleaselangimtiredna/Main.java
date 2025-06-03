@@ -7,13 +7,7 @@ package finalkanapleaselangimtiredna;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -31,6 +25,8 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     int worldLevel;
+    int money;
+   
     
     Rex rex = new Rex();
     Arth arth = new Arth();
@@ -406,6 +402,9 @@ public class Main extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
+        
+        Shop shop = new Shop();
+        shop.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void generateEnemy(){
