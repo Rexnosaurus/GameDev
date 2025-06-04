@@ -8,8 +8,8 @@ package finalkanapleaselangimtiredna;
 
 public class Aaron extends Player{
 
-    public Aaron() {
-        super(1, 1, "Aaron", 600, 600, 200, 200, 0, 100, 50, 5, 5, 10, 15);
+    public Aaron(PlayerInventory inv) {
+        super(1, 1, "Aaron", 600, 600, 200, 200, 0, 100, 50, 5, 5, 10, 15, inv);
         
     }
     

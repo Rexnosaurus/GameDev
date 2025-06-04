@@ -7,9 +7,12 @@ package finalkanapleaselangimtiredna;
 
 
 public class Player extends Entity{
-
+    private PlayerInventory inventory;
     boolean  isDodging = false;
-    public Player(int playerLevel, int experiencePoints, String playerName, int playerHp, int playerMaxHp, int playerMana, int playerMaxMana, int playerDefense, int playerBaseAttack, int playerCritDamage, double playerCritRate, int playerDodgeCooldown, int playerSkill1Cooldown, int playerSkill2Cooldown) {
+    int expThreshold = 100;
+    int currentExp = 0;
+    public Player(int playerLevel, int experiencePoints, String playerName, int playerHp, int playerMaxHp, int playerMana, int playerMaxMana, int playerDefense, int playerBaseAttack,
+            int playerCritDamage, double playerCritRate, int playerDodgeCooldown, int playerSkill1Cooldown, int playerSkill2Cooldown, PlayerInventory inv) {
         super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         
         this.level = playerLevel;
@@ -25,7 +28,15 @@ public class Player extends Entity{
         this.dodgeCooldown = playerDodgeCooldown;
         this.skill1Cooldown = playerSkill1Cooldown;
         this.skill2Cooldown = playerSkill2Cooldown;
-        
+        this.inventory = inv;
+    }
+    
+    public void useItem(Item item) {
+        inventory.useItem(name, this);
+    }
+    
+    public void useItem(String itemName) {
+        inventory.useItem(itemName, this);
     }
     
     @Override

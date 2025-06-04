@@ -2,19 +2,35 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package finalkanapleaselangimtiredna;
 
-import java.util.HashMap;
-
-
-public class PlayerInventory {
-
-    HashMap<Item, Integer> contents = new HashMap<>();
-    
+public class PlayerInventory extends AbstractInventory {
     public PlayerInventory() {
-        
+        super();
     }
     
+    public void useItem(Item item, Player user) {
+        item.use(user);
+    }
     
+    public void useItem(String itemName, Player user) {
+        try {
+            Object[] contentsKeySet = CONTENTS.keySet().toArray();
+            for(int i = 0; i < contentsKeySet.length; i++) {
+                Item currentItem = (Item) contentsKeySet[i];
+                if(currentItem.getItemName().equalsIgnoreCase(itemName)) {
+                    int currentItemAmount = CONTENTS.get(currentItem);
+                    if(currentItemAmount-1 == 0) {
+                        currentItem.use(user);
+                    }
+                    else {
+                        CONTENTS.put(currentItem, currentItemAmount-1);
+                    }
+                }
+            }
+        }
+        catch(Exception e) {
+            
+        }
+    } 
 }

@@ -6,19 +6,24 @@ package finalkanapleaselangimtiredna;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
  * @author rexiepimentelMBP
  */
 public class Shop extends javax.swing.JFrame {
-    /**
-     * Creates new form Inventory
-     */
-    public Shop() {
+    ShopInventory stock;
+    
+    // Default Constructor. Do not remove
+    public Shop(){};
+    
+    public Shop(AbstractInventory recipientInventory) {
+        stock = new ShopInventory(recipientInventory);
         initComponents();
         displayItem();
-        txtCost.setValue(0);
+        tableItems.getTableHeader().setResizingAllowed(false);
+        tableItems.getTableHeader().setReorderingAllowed(false);
     }
 
     /**
@@ -108,6 +113,11 @@ public class Shop extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tableItems.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableItemsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableItems);
 
         javax.swing.GroupLayout panelItemListLayout = new javax.swing.GroupLayout(panelItemList);
@@ -133,8 +143,15 @@ public class Shop extends javax.swing.JFrame {
         panelButtons.add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 537, 189, 76));
 
         btnBuy.setText("Buy");
+        btnBuy.setEnabled(false);
+        btnBuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuyActionPerformed(evt);
+            }
+        });
         panelButtons.add(btnBuy, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 455, 189, 76));
 
+        txtName.setEditable(false);
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNameActionPerformed(evt);
@@ -142,6 +159,7 @@ public class Shop extends javax.swing.JFrame {
         });
         panelButtons.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 110, 50));
 
+        txtTotalPrice.setEditable(false);
         txtTotalPrice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTotalPriceActionPerformed(evt);
@@ -161,6 +179,8 @@ public class Shop extends javax.swing.JFrame {
         txtQuantity.setModel(new javax.swing.SpinnerNumberModel());
         txtQuantity.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         txtQuantity.setEditor(new javax.swing.JSpinner.NumberEditor(txtQuantity, ""));
+        txtQuantity.setEnabled(false);
+        txtQuantity.setValue(1);
         txtQuantity.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 txtQuantityStateChanged(evt);
@@ -171,6 +191,8 @@ public class Shop extends javax.swing.JFrame {
         jLabel6.setText("Item Cost:");
         panelButtons.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, 50));
 
+        txtCost.setEditable(false);
+        txtCost.setText("0");
         txtCost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCostActionPerformed(evt);
@@ -214,37 +236,69 @@ public class Shop extends javax.swing.JFrame {
 
     private void txtTotalPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPriceActionPerformed
         // TODO add your handling code here:
-
+        
     }//GEN-LAST:event_txtTotalPriceActionPerformed
 
     private void txtQuantityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtQuantityStateChanged
         // TODO add your handling code here:
         if (txtCost.getText().isEmpty()) {
             
-        } else {
-            
+        }
+        else {
             totalCost();
         }
-        
     }//GEN-LAST:event_txtQuantityStateChanged
 
     private void txtCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCostActionPerformed
 
-    
-    
-   
-    
-    
-    public void displayItem(){
+    private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
+        int selectedRowIndex = tableItems.getSelectedRow();
         
-        javax.swing.table.DefaultTableModel dfTableModel = new DefaultTableModel();
+        int quantity = (int) txtQuantity.getValue();
+        int cost = (int) txtCost.getValue();
+        int totalCost = quantity * cost;
+    }//GEN-LAST:event_btnBuyActionPerformed
+
+    private void tableItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableItemsMouseClicked
+        System.out.println("here");
         
-        dfTableModel.addColumn("Name");
-        dfTableModel.addColumn("Quantity");
+        int selectedRowIndex = tableItems.getSelectedRow();
+        Item selectedItem = stock.getItemAt(selectedRowIndex);
         
-        dfTableModel.addRow(new Object[]{new Items.potionLargeHealth().getItemName(), });
+        txtQuantity.setEnabled(true);
+        btnBuy.setEnabled(true);
+        SpinnerNumberModel snm = new SpinnerNumberModel();
+        snm.setMaximum(stock.CONTENTS.get(selectedItem));
+        snm.setMinimum(1);
+        txtQuantity.setValue(1);
+        txtQuantity.setModel(snm);
+        
+        txtCost.setText(""+selectedItem.getItemPrice());
+        this.revalidate();
+        this.repaint();
+    }//GEN-LAST:event_tableItemsMouseClicked
+
+
+    public void displayItem(){ 
+        javax.swing.table.DefaultTableModel dfTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
+        
+        dfTableModel.addColumn("Item");
+        dfTableModel.addColumn("Price");
+        dfTableModel.addColumn("Stock");
+        
+        Object[] keySet = stock.CONTENTS.keySet().toArray();
+        for(int i = 0; i < keySet.length; i++) {
+            Item currentItem = (Item) keySet[i];
+            dfTableModel.addRow(new Object[]{currentItem.getItemName(), currentItem.getItemPrice(), stock.CONTENTS.get(currentItem)});
+        }
+
         tableItems.setModel(dfTableModel);
         
     }
