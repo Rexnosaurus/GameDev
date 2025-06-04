@@ -8,8 +8,8 @@ package finalkanapleaselangimtiredna;
 
 public class Enemy extends Entity{
 
-    public Enemy(int level, String enemyName, int enemyHp, int enemyMaxHp, int enemyMana, int enemyMaxMana, int enemyDefense, int enemyBaseAttack, int enemyCritDamage, int enemyCritRate, int enemyDodgeCooldown, int enemySkill1Cooldown, int enemySkill2Cooldown) {
-        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 10);
+    public Enemy(int level, String enemyName, int enemyHp, int enemyMaxHp, int enemyMana, int enemyMaxMana, int enemyDefense, int enemyBaseAttack, int enemyCritDamage, int enemyCritRate, int enemyDodgeCooldown, int enemySkill1Cooldown, int enemySkill2Cooldown, int multiplier) {
+        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 10, 1.5);
         
         this.name = enemyName;
         this.hp = enemyHp;
@@ -23,6 +23,8 @@ public class Enemy extends Entity{
         this.dodgeCooldown = enemyDodgeCooldown;
         this.skill1Cooldown = enemySkill1Cooldown;
         this.skill2Cooldown = enemySkill2Cooldown;
+        this.multiplier = multiplier;
+        
         
     }
     
@@ -116,7 +118,7 @@ public class Enemy extends Entity{
         } else {
             enemyName = "Unknown Enemy";
         }       
-        return new Enemy(level, enemyName, enemyHp, enemyMaxHp, enemyMana, enemyMaxMana, enemyDefense, enemyBaseAttack, enemyCritDamage, enemtCritRate, 0, 0, 0);
+        return new Enemy(level, enemyName, enemyHp, enemyMaxHp, enemyMana, enemyMaxMana, enemyDefense, enemyBaseAttack, enemyCritDamage, enemtCritRate, 0, 0, 0, 1);
         
         
     }
