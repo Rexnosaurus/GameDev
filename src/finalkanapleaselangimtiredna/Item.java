@@ -6,29 +6,25 @@
 package finalkanapleaselangimtiredna;
 
 
-public class Item {
+public abstract class Item {
     int itemId;
     String itemName;
-    int itemQuantity;
     String itemDescription;
     int itemPrice;
     int itemSellCost;
 
-    public Item(int itemId, String itemName, int itemQuantity, String itemDescription, int itemPrice, int itemSellCost) {
+    public Item(int itemId, String itemName, String itemDescription, int itemPrice, int itemSellCost) {
         this.itemId = itemId;
         this.itemName = itemName;
-        this.itemQuantity = itemQuantity;
         this.itemDescription = itemDescription;
         this.itemPrice = itemPrice;
         this.itemSellCost = itemSellCost;
     }
     
-    public void usage(Entity activeCharacter){
-        
-    }
+    public abstract void use(Entity activeCharacter);
     
-    public void description(){
-        
+    public String getDescription(){
+        return itemDescription;
     }
     
     public String getItemName() {
@@ -39,6 +35,8 @@ public class Item {
         return itemPrice;
     }
     
-    
-    
+    @Override
+    public int hashCode() {
+        return itemId;
+    }
 }

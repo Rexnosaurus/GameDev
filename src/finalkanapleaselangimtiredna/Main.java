@@ -28,10 +28,11 @@ public class Main extends javax.swing.JFrame {
     int worldLevel;
     int money;
    
+    PlayerInventory sharedInventory = new PlayerInventory();
     
-    Rex rex = new Rex();
-    Arth arth = new Arth();
-    Aaron aaron = new Aaron();
+    Rex rex = new Rex(sharedInventory);
+    Arth arth = new Arth(sharedInventory);
+    Aaron aaron = new Aaron(sharedInventory);
     
     Enemy enemy = Enemy.generateEnemy(worldLevel);
     
@@ -39,9 +40,10 @@ public class Main extends javax.swing.JFrame {
     
     InputStream music;
     
+    Shop shop = new Shop(sharedInventory);
+    
     public Main() {
         initComponents();
-        
         activeCharacter = rex;
     }
 
@@ -405,8 +407,7 @@ public class Main extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         
-        
-        Shop shop = new Shop();
+        shop.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
         shop.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
