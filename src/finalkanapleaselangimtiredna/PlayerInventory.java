@@ -5,8 +5,10 @@
 package finalkanapleaselangimtiredna;
 
 public class PlayerInventory extends AbstractInventory {
+    private int money;
     public PlayerInventory() {
         super();
+        money = 0;
     }
     
     public void useItem(Item item, Player user) {
@@ -32,5 +34,13 @@ public class PlayerInventory extends AbstractInventory {
         catch(Exception e) {
             
         }
-    } 
+    }
+    
+    public int getMoney() {
+        return money;
+    }
+    
+    public void setMoney(int amt) {
+        money = amt;
+    }
 }

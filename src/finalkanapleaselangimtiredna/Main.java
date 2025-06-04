@@ -26,7 +26,6 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
     int worldLevel;
-    int money;
    
     PlayerInventory sharedInventory = new PlayerInventory();
     
@@ -40,11 +39,17 @@ public class Main extends javax.swing.JFrame {
     
     InputStream music;
     
-    Shop shop = new Shop(sharedInventory);
+    Shop shop;
+    Inventory inventory;
     
     public Main() {
         initComponents();
         activeCharacter = rex;
+        sharedInventory.setMoney(500);
+        shop = new Shop(sharedInventory);
+        shop.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
+        inventory = new Inventory(sharedInventory);
+        inventory.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
     }
 
     /**
@@ -60,8 +65,9 @@ public class Main extends javax.swing.JFrame {
         btnArth = new javax.swing.JButton();
         btnRex = new javax.swing.JButton();
         btnAaron = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Shop = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        Inventory = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         PanelBattlemiscellaneous = new javax.swing.JPanel();
         PanelPlayerInfo = new javax.swing.JPanel();
@@ -109,10 +115,10 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("LevelUp");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        Shop.setText("Shop");
+        Shop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                ShopActionPerformed(evt);
             }
         });
 
@@ -123,22 +129,33 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        Inventory.setText("Bag");
+        Inventory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InventoryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap(8, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAaron, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnRex, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btnArth, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Shop, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(0, 2, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnAaron, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(btnRex, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addComponent(btnArth, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Inventory, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -150,8 +167,10 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(btnRex, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAaron, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                .addComponent(Inventory)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Shop)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
@@ -290,7 +309,7 @@ public class Main extends javax.swing.JFrame {
         );
 
         jPanel2.add(PanelBattlemiscellaneous);
-        PanelBattlemiscellaneous.setBounds(1, 584, 1097, 111);
+        PanelBattlemiscellaneous.setBounds(1, 584, 1087, 109);
 
         PanelEnemyInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -327,7 +346,7 @@ public class Main extends javax.swing.JFrame {
         );
 
         jPanel2.add(PanelEnemyInfo);
-        PanelEnemyInfo.setBounds(1, 1, 1097, 79);
+        PanelEnemyInfo.setBounds(1, 1, 1092, 78);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -405,11 +424,9 @@ public class Main extends javax.swing.JFrame {
         updateLabelAndBars();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        shop.setDefaultCloseOperation(javax.swing.JFrame.HIDE_ON_CLOSE);
+    private void ShopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShopActionPerformed
         shop.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_ShopActionPerformed
 
     private void generateEnemy(){
         enemy = Enemy.generateEnemy(worldLevel);
@@ -525,6 +542,10 @@ public class Main extends javax.swing.JFrame {
             activeCharacter.dodge();
         }        
     }//GEN-LAST:event_btnDodgeActionPerformed
+
+    private void InventoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InventoryActionPerformed
+        inventory.setVisible(true);
+    }//GEN-LAST:event_InventoryActionPerformed
 
     
     private void updateLabelAndBars(){
@@ -649,10 +670,12 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Inventory;
     private javax.swing.JPanel PanelBattleDoings;
     private javax.swing.JPanel PanelBattlemiscellaneous;
     private javax.swing.JPanel PanelEnemyInfo;
     private javax.swing.JPanel PanelPlayerInfo;
+    private javax.swing.JButton Shop;
     private javax.swing.JButton btnAaron;
     private javax.swing.JButton btnArth;
     private javax.swing.JButton btnBasicAttack;
@@ -661,7 +684,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton btnSkill1;
     private javax.swing.JButton btnSkill2;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

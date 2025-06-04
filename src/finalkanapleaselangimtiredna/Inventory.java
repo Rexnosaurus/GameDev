@@ -4,17 +4,21 @@
  */
 package finalkanapleaselangimtiredna;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author rexiepimentelMBP
  */
 public class Inventory extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Inventory
-     */
-    public Inventory() {
+    PlayerInventory inventory;
+    
+    public Inventory(){};
+    
+    public Inventory(PlayerInventory inv) {
         initComponents();
+        inventory = inv;
+        displayItem();
     }
 
     /**
@@ -37,6 +41,11 @@ public class Inventory extends javax.swing.JFrame {
         btnBuy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         panelItemInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -144,9 +153,33 @@ public class Inventory extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        displayItem();
+    }//GEN-LAST:event_formWindowActivated
+
     /**
      * @param args the command line arguments
      */
+     public void displayItem(){ 
+        javax.swing.table.DefaultTableModel dfTableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
+        
+        dfTableModel.addColumn("Item");
+        dfTableModel.addColumn("Quantity");
+        
+        Object[] keySet = inventory.CONTENTS.keySet().toArray();
+        for(int i = 0; i < keySet.length; i++) {
+            Item currentItem = (Item) keySet[i];
+            dfTableModel.addRow(new Object[]{currentItem.getItemName(), inventory.CONTENTS.get(currentItem)});
+        }
+
+        tableItems.setModel(dfTableModel);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

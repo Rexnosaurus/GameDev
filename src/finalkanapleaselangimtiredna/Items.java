@@ -42,8 +42,9 @@ public class Items {
                 "Large Health Potion", 
                 "A potion that will greatly restore hp of an active character", 
                 150, 
-                75);    
-            }
+                75
+            );    
+        }
         
         @Override
         public void use(Entity activeCharacter){

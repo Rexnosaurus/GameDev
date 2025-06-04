@@ -8,9 +8,9 @@ public class ShopInventory extends AbstractInventory {
     // CONTENTS GUIDE
     // ItemForSale : Stock
     private int currentFloor = 1;
-    AbstractInventory recipientInventory;
+    PlayerInventory recipientInventory;
     
-    public ShopInventory(AbstractInventory recipientInv) {
+    public ShopInventory(PlayerInventory recipientInv) {
         recipientInventory = recipientInv;
         restock();
     }
@@ -25,5 +25,14 @@ public class ShopInventory extends AbstractInventory {
     public void restock() {
         CONTENTS.put(new Items.PotionSmallHealth(), 2);
         CONTENTS.put(new Items.PotionLargeMana(), 4);
+    }
+    
+    public void updateStock(int index, int amt) {
+        Object[] keySet = CONTENTS.keySet().toArray();
+        CONTENTS.put((Item) keySet[index], amt);
+    }
+    
+    public PlayerInventory getRecipientInventory() {
+        return recipientInventory;
     }
 }

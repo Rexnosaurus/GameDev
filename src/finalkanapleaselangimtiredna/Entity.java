@@ -23,7 +23,7 @@ public class Entity {
     int skill2Cooldown;
     double multiplier;
 
-    public Entity(int level, int experiencePoints, String name, int hp, int maxHp, int mana, int maxMana, int defense, int baseAttack, int critDamage, double critRate, int dodgeCooldown, int skill1Cooldown, int skill2Cooldown, double multiplier) {
+    public Entity(int level, int experiencePoints, String name, int hp, int maxHp, int mana, int maxMana, int defense, int baseAttack, int critDamage, double critRate, int dodgeCooldown, int skill1Cooldown, int skill2Cooldown) {
         this.level = level;
         this.name = name;
         this.hp = hp;

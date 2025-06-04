@@ -20,7 +20,13 @@ public abstract class AbstractInventory {
     }
     
     public void addItem(Item item, int amount) {
-        CONTENTS.put(item, amount);
+        if(CONTENTS.containsKey(item)) {
+            CONTENTS.put(item, CONTENTS.get(item)+amount);
+        }
+        else {
+            CONTENTS.put(item, amount);
+        }
+        System.out.println(CONTENTS);
     }
     
     public void removeItemEntry(Item item) {

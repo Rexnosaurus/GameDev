@@ -13,7 +13,7 @@ public class Player extends Entity{
     int currentExp = 0;
     public Player(int playerLevel, int experiencePoints, String playerName, int playerHp, int playerMaxHp, int playerMana, int playerMaxMana, int playerDefense, int playerBaseAttack,
             int playerCritDamage, double playerCritRate, int playerDodgeCooldown, int playerSkill1Cooldown, int playerSkill2Cooldown, PlayerInventory inv) {
-        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         
         this.level = playerLevel;
         this.name = playerName;
@@ -28,6 +28,28 @@ public class Player extends Entity{
         this.dodgeCooldown = playerDodgeCooldown;
         this.skill1Cooldown = playerSkill1Cooldown;
         this.skill2Cooldown = playerSkill2Cooldown;
+        this.inventory = inv;
+        
+    }
+    
+    public Player(String name, int baseHP, int baseMP, int def, int atk, PlayerInventory inv) {
+        super(
+        1,
+        0,
+        name,
+        baseHP,
+        baseHP,
+        baseMP,
+        baseMP,
+        def,
+        atk,
+        50,
+        5,
+        5,
+        10,
+        15
+        );
+        
         this.inventory = inv;
     }
     

@@ -39,4 +39,12 @@ public abstract class Item {
     public int hashCode() {
         return itemId;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if(this.hashCode() == obj.hashCode()) {
+            return true;
+        }
+        return false;
+    }
 }

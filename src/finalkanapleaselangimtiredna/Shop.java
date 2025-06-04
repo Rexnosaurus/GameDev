@@ -4,6 +4,11 @@
  */
 package finalkanapleaselangimtiredna;
 
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SpinnerNumberModel;
@@ -14,16 +19,19 @@ import javax.swing.SpinnerNumberModel;
  */
 public class Shop extends javax.swing.JFrame {
     ShopInventory stock;
+    Item currentItem;
+    int currentItemIndex;
     
     // Default Constructor. Do not remove
     public Shop(){};
     
-    public Shop(AbstractInventory recipientInventory) {
+    public Shop(PlayerInventory recipientInventory) {
         stock = new ShopInventory(recipientInventory);
         initComponents();
         displayItem();
         tableItems.getTableHeader().setResizingAllowed(false);
         tableItems.getTableHeader().setReorderingAllowed(false);
+        mani.setText("Money: "+recipientInventory.getMoney());
     }
 
     /**
@@ -37,23 +45,30 @@ public class Shop extends javax.swing.JFrame {
 
         panelItemInfo = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        txtDesc = new javax.swing.JLabel();
         panelItemList = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
         panelButtons = new javax.swing.JPanel();
         btnClose = new javax.swing.JButton();
         btnBuy = new javax.swing.JButton();
-        txtName = new javax.swing.JTextField();
+        txtCost = new javax.swing.JTextField();
         txtTotalPrice = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtQuantity = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
-        txtCost = new javax.swing.JFormattedTextField();
+        txtName1 = new javax.swing.JTextField();
+        mani = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         panelItemInfo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -61,8 +76,8 @@ public class Shop extends javax.swing.JFrame {
         jLabel1.setText("Selected Item Image");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Selected Item Description");
+        txtDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtDesc.setText("Selected Item Description");
 
         javax.swing.GroupLayout panelItemInfoLayout = new javax.swing.GroupLayout(panelItemInfo);
         panelItemInfo.setLayout(panelItemInfoLayout);
@@ -71,7 +86,7 @@ public class Shop extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelItemInfoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelItemInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+                    .addComponent(txtDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -81,7 +96,7 @@ public class Shop extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtDesc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -151,13 +166,14 @@ public class Shop extends javax.swing.JFrame {
         });
         panelButtons.add(btnBuy, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 455, 189, 76));
 
-        txtName.setEditable(false);
-        txtName.addActionListener(new java.awt.event.ActionListener() {
+        txtCost.setEditable(false);
+        txtCost.setText("0");
+        txtCost.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNameActionPerformed(evt);
+                txtCostActionPerformed(evt);
             }
         });
-        panelButtons.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 110, 50));
+        panelButtons.add(txtCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 110, 50));
 
         txtTotalPrice.setEditable(false);
         txtTotalPrice.addActionListener(new java.awt.event.ActionListener() {
@@ -191,14 +207,24 @@ public class Shop extends javax.swing.JFrame {
         jLabel6.setText("Item Cost:");
         panelButtons.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, 50));
 
-        txtCost.setEditable(false);
-        txtCost.setText("0");
-        txtCost.addActionListener(new java.awt.event.ActionListener() {
+        txtName1.setEditable(false);
+        txtName1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCostActionPerformed(evt);
+                txtName1ActionPerformed(evt);
             }
         });
-        panelButtons.add(txtCost, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 110, 50));
+        panelButtons.add(txtName1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 110, 50));
+
+        mani.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        panelButtons.add(mani, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 170, 40));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        panelButtons.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,17 +248,22 @@ public class Shop extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    public void totalCost(){
+    public int totalCost(){
         int quantity = (int) txtQuantity.getValue();
-        int cost = (int) txtCost.getValue();
+        int cost = currentItem.getItemPrice();
         int totalCost = quantity * cost;
-        
-        txtTotalPrice.setText(String.valueOf(totalCost));
+  
+        txtTotalPrice.setText(""+totalCost);
+        return totalCost;
     }
     
-    private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
+    public void updateDisplay() {
+        
+    }
+    
+    private void txtCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNameActionPerformed
+    }//GEN-LAST:event_txtCostActionPerformed
 
     private void txtTotalPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPriceActionPerformed
         // TODO add your handling code here:
@@ -240,45 +271,89 @@ public class Shop extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTotalPriceActionPerformed
 
     private void txtQuantityStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_txtQuantityStateChanged
-        // TODO add your handling code here:
-        if (txtCost.getText().isEmpty()) {
-            
+        totalCost();
+        
+        if(stock.getRecipientInventory().getMoney() >= totalCost() && stock.CONTENTS.get(currentItem) > 0) {
+            btnBuy.setEnabled(true);
         }
         else {
-            totalCost();
+            btnBuy.setEnabled(false);
         }
     }//GEN-LAST:event_txtQuantityStateChanged
 
-    private void txtCostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCostActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCostActionPerformed
-
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
-        int selectedRowIndex = tableItems.getSelectedRow();
+        stock.getRecipientInventory().setMoney(stock.getRecipientInventory().getMoney()-totalCost());
+        mani.setText("Money: "+stock.getRecipientInventory().getMoney());
+        stock.updateStock(currentItemIndex, stock.CONTENTS.get(currentItem)-(int) txtQuantity.getValue());
         
-        int quantity = (int) txtQuantity.getValue();
-        int cost = (int) txtCost.getValue();
-        int totalCost = quantity * cost;
+        stock.getRecipientInventory().addItem(currentItem, (int) txtQuantity.getValue());
+        
+        // Buy Button update
+        if(stock.getRecipientInventory().getMoney() >= totalCost() && stock.CONTENTS.get(currentItem) - (int) txtQuantity.getValue() > 0) {
+            btnBuy.setEnabled(true);
+        }
+        else {
+            btnBuy.setEnabled(false);
+        }
+        
+        if(stock.CONTENTS.get(currentItem)-(int) txtQuantity.getValue() <= 0) {
+            txtQuantity.setEnabled(false);
+        }
+        
+        displayItem();
     }//GEN-LAST:event_btnBuyActionPerformed
 
     private void tableItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableItemsMouseClicked
-        System.out.println("here");
-        
-        int selectedRowIndex = tableItems.getSelectedRow();
-        Item selectedItem = stock.getItemAt(selectedRowIndex);
+        currentItemIndex = tableItems.getSelectedRow();
+        currentItem = stock.getItemAt(currentItemIndex);
         
         txtQuantity.setEnabled(true);
-        btnBuy.setEnabled(true);
+        
+        
         SpinnerNumberModel snm = new SpinnerNumberModel();
-        snm.setMaximum(stock.CONTENTS.get(selectedItem));
+        snm.setMaximum(stock.CONTENTS.get(currentItem));
+        
+        if(stock.CONTENTS.get(currentItem) <= 0) {
+            txtQuantity.setEnabled(false);
+        } 
+        
+        if(stock.getRecipientInventory().getMoney() >= totalCost() && stock.CONTENTS.get(currentItem) > 0) {
+            btnBuy.setEnabled(true);
+        }
+        else {
+            btnBuy.setEnabled(false);
+        }
+        
         snm.setMinimum(1);
-        txtQuantity.setValue(1);
+        snm.setValue(1);
+        txtQuantity.setValue(1); 
         txtQuantity.setModel(snm);
         
-        txtCost.setText(""+selectedItem.getItemPrice());
-        this.revalidate();
-        this.repaint();
+        txtDesc.setText(currentItem.getDescription());
+        txtName1.setText(currentItem.getItemName());
+        txtCost.setText(""+currentItem.getItemPrice());
+        totalCost();
     }//GEN-LAST:event_tableItemsMouseClicked
+
+    private void txtName1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtName1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtName1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        stock.getRecipientInventory().setMoney(stock.getRecipientInventory().getMoney()+250);
+        mani.setText("Money: "+stock.getRecipientInventory().getMoney());
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // WIP // Display Updater
+        mani.setText("Money: "+stock.getRecipientInventory().getMoney());
+        if(currentItem != null && stock.getRecipientInventory().getMoney() >= totalCost() && stock.CONTENTS.get(currentItem) > 0) {
+            btnBuy.setEnabled(true);
+        }
+        else {
+            btnBuy.setEnabled(false);
+        }
+    }//GEN-LAST:event_formWindowActivated
 
 
     public void displayItem(){ 
@@ -346,19 +421,21 @@ public class Shop extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuy;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel mani;
     private javax.swing.JPanel panelButtons;
     private javax.swing.JPanel panelItemInfo;
     private javax.swing.JPanel panelItemList;
     private javax.swing.JTable tableItems;
-    private javax.swing.JFormattedTextField txtCost;
-    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtCost;
+    private javax.swing.JLabel txtDesc;
+    private javax.swing.JTextField txtName1;
     private javax.swing.JSpinner txtQuantity;
     private javax.swing.JTextField txtTotalPrice;
     // End of variables declaration//GEN-END:variables
