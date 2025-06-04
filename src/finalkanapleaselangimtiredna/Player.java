@@ -8,8 +8,9 @@ package finalkanapleaselangimtiredna;
 
 public class Player extends Entity{
 
+    boolean  isDodging = false;
     public Player(int playerLevel, int experiencePoints, String playerName, int playerHp, int playerMaxHp, int playerMana, int playerMaxMana, int playerDefense, int playerBaseAttack, int playerCritDamage, double playerCritRate, int playerDodgeCooldown, int playerSkill1Cooldown, int playerSkill2Cooldown) {
-        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         
         this.level = playerLevel;
         this.name = playerName;
@@ -28,13 +29,16 @@ public class Player extends Entity{
     }
     
     @Override
-    public void basicAttack(){
-        
+    public void basicAttack(Enemy enemy){
+        int damage = calculateBasicAttackDamage();
+        enemy.takeDamage(damage);
+        System.out.println(name + " dealt " + damage + " damage with Basic Attack.");        
     }
     
     @Override
     public void dodge(){
-        
+        isDodging = true;
+        System.out.println(name + " is dodging the next attack.");        
     }
     
     @Override
@@ -46,6 +50,14 @@ public class Player extends Entity{
     public void skill2(){
         
     }
+    
+    public int calculateBasicAttackDamage() {
+        int critChance = (int)(Math.random()*100 + 1);
+        if (critChance <= critRate) {
+            return (int)(baseAttack * (1 + critDamage));
+        }
+        return baseAttack;
+    }    
     
     
     @Override

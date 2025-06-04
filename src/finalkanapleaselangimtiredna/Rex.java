@@ -14,8 +14,10 @@ public class Rex extends Player{
     }
     
     @Override
-    public void basicAttack(){
-
+    public void basicAttack(Enemy enemy){
+        int damage = calculateBasicAttackDamage();
+        enemy.takeDamage(damage);
+        System.out.println(name + " dealt " + damage + " damage with Basic Attack.");        
     }
     
     @Override

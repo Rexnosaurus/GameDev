@@ -7,6 +7,8 @@ package finalkanapleaselangimtiredna;
 
 
 public class Enemy extends Entity{
+    
+    public boolean isDodging = false;
 
     public Enemy(int level, String enemyName, int enemyHp, int enemyMaxHp, int enemyMana, int enemyMaxMana, int enemyDefense, int enemyBaseAttack, int enemyCritDamage, int enemyCritRate, int enemyDodgeCooldown, int enemySkill1Cooldown, int enemySkill2Cooldown, int multiplier) {
         super(1, 0, null, 0, 0, 0, 0, 0, 0, 0, 0, 2, 5, 10, 1.5);
@@ -28,17 +30,19 @@ public class Enemy extends Entity{
         
     }
     
-        @Override
-    public void basicAttack(){
-        
+    public void basicAttack(Entity activeCharacter){
+        int damage = this.baseAttack;
+        activeCharacter.hp -= damage;
+        if (activeCharacter.hp < 0) activeCharacter.hp = 0;
         System.out.println("Enemy do a Basic Attack");
-
+        
     }
     
     @Override
     public void dodge(){
         
-        System.out.println("Enemy use Dodge");
+        isDodging = true;
+        System.out.println(name + " is dodging the next attack.");
         
     }
     
@@ -52,6 +56,20 @@ public class Enemy extends Entity{
     public void skill2(){
         
         System.out.println("Enemy use Skill2");
+    }
+    
+
+    public void takeDamage(int damage) {
+        if (isDodging) {
+            System.out.println(name + " dodged the attack!");
+            isDodging = false; // dodge only applies to one attack
+            damage = 0;
+        }
+        hp -= damage;
+        if (hp < 0) {
+            hp = 0;
+        }
+        System.out.println(name + " has " + hp + " HP left.");
     }
     
     
@@ -82,6 +100,7 @@ public class Enemy extends Entity{
         int enemyBaseAttack = 50 + level * 50;
         int enemyCritDamage = 50 + level * 2;
         int enemtCritRate = 5 + (level / 2);
+        double multiplier = 1.5 + (level*2);
         
         if (level < 10) {
             if (level % 2 == 0) {
@@ -128,6 +147,10 @@ public class Enemy extends Entity{
         System.out.println("=====" + name + "=====");
         System.out.println("Hp: " + hp);
         System.out.println("Mana: " + mana);
+    }
+
+    void dodge(Entity activeCharacter) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     
