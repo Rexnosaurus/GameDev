@@ -12,6 +12,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -40,8 +41,6 @@ public class Main extends javax.swing.JFrame {
     
     public Main() {
         initComponents();
-        
-        
         
         activeCharacter = rex;
     }
@@ -230,6 +229,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         btnDodge.setText("Dodge");
+        btnDodge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDodgeActionPerformed(evt);
+            }
+        });
 
         btnSkill1.setText("Skill1");
 
@@ -413,6 +417,8 @@ public class Main extends javax.swing.JFrame {
     private void btnBasicAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBasicAttackActionPerformed
         // TODO add your handling code here:
         
+        updateLabelAndBars();        
+        
         int damageDealt = basicAttackDamageDealt() - enemy.defense;
         
         enemy.hp -= damageDealt;
@@ -422,7 +428,10 @@ public class Main extends javax.swing.JFrame {
             worldLevel ++;
             generateEnemy();
         }
-        updateLabelAndBars();
+
+        updateLabelAndBars();        
+        
+        enemyTakeTurn();
     }//GEN-LAST:event_btnBasicAttackActionPerformed
 
     private void btnSkill2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSkill2ActionPerformed
@@ -491,8 +500,36 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSkill2ActionPerformed
 
+    private void btnDodgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodgeActionPerformed
+        // TODO add your handling code here:
+        if (activeCharacter.equals(arth)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2ArthAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            activeCharacter.dodge();
+        } else if (activeCharacter.equals(aaron)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2AaronAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            activeCharacter.dodge();
+        } else if (activeCharacter.equals(rex)) {
+            
+            lblSkill2Icon.setIcon(new ImageIcon(getClass().getResource("/Animations/skill2RexAnimation.gif")));
+            timer.start();
+            timer.setRepeats(false);
+            
+            activeCharacter.dodge();
+        }        
+    }//GEN-LAST:event_btnDodgeActionPerformed
+
     
     private void updateLabelAndBars(){
+        
+        checkActiveCharacterHp();        
         
         int percentageActiveCharacterHp = (activeCharacter.hp * 100) / activeCharacter.maxHp;
         int percentageActiveCharacterMana = (activeCharacter.mana * 100) / activeCharacter.maxMana;
@@ -509,20 +546,49 @@ public class Main extends javax.swing.JFrame {
         pBarActiveCharacterMana.setValue(percentageActiveCharacterMana);
         pBarEnemyHp.setValue(percentageEnemyHp);
         
+
+        
+    }
+    
+    private void checkActiveCharacterHp(){
+        
+        boolean RexisDead = false;
+        boolean ArthisDead = false;
+        boolean AaronisDead = false;
+        
+        if (activeCharacter == arth && arth.hp <= 0) {
+            ArthisDead = true;
+            btnArth.setEnabled(false);
+            activeCharacter = rex;   
+        }
+            
+        if (activeCharacter == rex && rex.hp <= 0) {
+            RexisDead = true;
+            btnRex.setEnabled(false);
+            activeCharacter = aaron;   
+        } else if (activeCharacter == aaron && aaron.hp <= 0) {
+            AaronisDead = true;
+            btnAaron.setEnabled(false);
+            activeCharacter = arth;   
+        } else if (rex.hp <= 0 || arth.hp <= 0 || aaron.hp <= 0) {
+            System.out.println("Game Over");
+        }
+        
     }
     
     private void enemyTakeTurn(){
         
-        int randomMove = (int)(Math.random()*4+1);
+        int randomMove = (int)(Math.random()*1+1);
         
         switch (randomMove) {
             
             case 1:
-                enemy.basicAttack();
+                enemy.basicAttack(activeCharacter);
+                System.out.println("PING");
                 break;
                 
             case 2:
-                enemy.dodge();
+                enemy.dodge(activeCharacter);
                 break;
                 
             case 3:

@@ -76,5 +76,9 @@ public class Entity {
     public void getStats(){
         
     }
+
+    void basicAttack(Enemy enemy) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }
